@@ -4,3 +4,5 @@ venv_tochka/
 yellowchangerapi.egg-info/
 build
 dist
+yellow_changer_api/__pycache__
+__pycache__
