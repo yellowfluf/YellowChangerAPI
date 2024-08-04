@@ -1,6 +1,3 @@
-Sure, here is the `README.md` content formatted for easy copying:
-
-```markdown
 # YellowChangerAPI
 
 `YellowChangerAPI` is a Python library for interacting with the [YellowChanger](https://yellowchanger.com) service API. The library allows you to get exchange rates, create trades, and get information about trades.
