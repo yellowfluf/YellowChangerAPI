@@ -1,4 +1,3 @@
-```markdown
 # YellowChangerAPI
 
 `YellowChangerAPI` is a Python library for interacting with the [YellowChanger](https://yellowchanger.com) service API. The library allows you to get exchange rates, create trades, and get information about trades.
@@ -16,7 +15,7 @@ pip install yellowchangerapi
 Example of using the library:
 
 ```python
-from yellow_changer import YellowChanger
+from yellow_changer_api import YellowChanger
 
 def main():
     public_api_key = "your_public_api_key"

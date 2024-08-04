@@ -1,12 +1,9 @@
 import hashlib
 import hmac
 import json
-from decimal import Decimal
 from typing import Union
-
-import requests as requests
-
-from exceptions import BadRequest
+import requests
+from .exceptions import BadRequest
 
 
 class YellowChanger():

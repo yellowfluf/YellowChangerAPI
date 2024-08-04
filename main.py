@@ -1,4 +1,4 @@
-from yellow_changer import YellowChanger
+from yellow_changer_api import YellowChanger
 
 
 def main():

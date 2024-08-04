@@ -1,3 +1,6 @@
 venv_tochka/
 .env
 .idea
+yellowchangerapi.egg-info/
+build
+dist

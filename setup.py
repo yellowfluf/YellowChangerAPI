@@ -6,7 +6,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="yellowchangerapi",
-    version="1.0.0",
+    version="1.0.2",
     author="whom",
     author_email="m0rtydisg@gmail.com",
     description="A Python library for interacting with the YellowChanger service API.",
