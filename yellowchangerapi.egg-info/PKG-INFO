@@ -1,3 +1,22 @@
+Metadata-Version: 2.1
+Name: yellowchangerapi
+Version: 0.1.0
+Summary: A Python library for interacting with the YellowChanger service API.
+Home-page: https://github.com/Whom-m0rty/YellowChangerAPI
+Author: Whom-m0rty
+Author-email: m0rtydisg@gmail.com
+License: UNKNOWN
+Project-URL: Bug Reports, https://github.com/Whom-m0rty/YellowChangerAPI/issues
+Project-URL: Source, https://github.com/Whom-m0rty/YellowChangerAPI/tree/main
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+
+Sure, here is the `README.md` content formatted for easy copying:
+
 ```markdown
 # YellowChangerAPI
 
@@ -120,3 +139,5 @@ trade = yellow_changer.create_trade(
 )
 print(trade)
 ```
+
+
