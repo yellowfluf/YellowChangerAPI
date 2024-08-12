@@ -2,8 +2,8 @@ from yellow_changer_api import YellowChanger
 
 
 def main():
-    public_api_key = "TPO9eMx9fSkkz_30AWhMJF79Iv3_747H"
-    secret_api_key = "ZI2h6QfOsmae00UQvDL1JtfaEHuFLae0"
+    public_api_key = "your_public_key"
+    secret_api_key = "your_private_key"
 
     yellow_changer = YellowChanger(public_api_key, secret_api_key)
 
