@@ -27,7 +27,7 @@ class YellowChanger():
     def __create_hmac_sha256(self, body: dict):
         """
         Method for generation signature of request.
-        Copied form https://yellowchanger.gitbook.io/api/signature
+        Copied form https://docs.yellowchanger.com/signature
 
         :param body: Body of request to make a signature
         """
@@ -82,7 +82,7 @@ class YellowChanger():
         """
         Gets all rates
 
-        https://yellowchanger.gitbook.io/api/methods/allrates
+        https://docs.yellowchanger.com/methods/allrates
         :return: json
         """
         response = self.__fetch('GET', 'trades/allRates')
@@ -92,7 +92,7 @@ class YellowChanger():
         """
         Gets all destinations list
 
-        https://yellowchanger.gitbook.io/api/methods/destinationslist
+        https://docs.yellowchanger.com/methods/destinationslist
 
         :return:
         """
@@ -103,7 +103,7 @@ class YellowChanger():
         """
         Gets all rates in specific direction
 
-        https://yellowchanger.gitbook.io/api/methods/ratesindirection
+        https://docs.yellowchanger.com/methods/ratesindirection
 
         :param direction: direction of rate, for example: 'USDT'
         :return: json
@@ -116,7 +116,7 @@ class YellowChanger():
         """
         Gets information about trade by uniq_id of trade
 
-        https://yellowchanger.gitbook.io/api/methods/tradestatus
+        https://docs.yellowchanger.com/methods/tradestatus
 
         :param uniq_id: uniq_id of trade
         :return: json
@@ -139,7 +139,7 @@ class YellowChanger():
             get_creds='0x4c...'
         )
 
-        https://yellowchanger.gitbook.io/api/methods/createtrade
+        https://docs.yellowchanger.com/methods/createtrade
 
         :param kwargs: named parameters
         :return:
