@@ -9,7 +9,6 @@ from . import models
 
 T = TypeVar('__T')
 
-
 class YellowChanger():
     def __init__(self, public_api_key: str, secret_api_key: str, base_url: Union[None, str] = None):
         """
