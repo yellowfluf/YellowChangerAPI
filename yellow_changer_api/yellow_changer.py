@@ -1,9 +1,13 @@
 import hashlib
 import hmac
 import json
-from typing import Union
+from typing import Union, TypeVar, Type, Callable, Any, Dict, List
 import requests
 from .exceptions import BadRequest
+from . import models
+
+
+T = TypeVar('__T')
 
 
 class YellowChanger():
@@ -78,6 +82,20 @@ class YellowChanger():
 
         return response
 
+    def __validate_response(model: Type[T]) -> Callable[..., Callable[..., T]]:
+        """
+        Validate model based on pydantic.BaseModel and retype func
+
+        :return: model_type
+        """
+        def decorator(function: Callable)  -> Any:
+            def wrapper(*args, **kwargs) -> Any:
+                data: Union[Dict, List] = function(*args, **kwargs)
+                return model.model_validate(data)
+            return wrapper
+        return decorator
+
+    @__validate_response(models.RatesList)
     def all_rates(self):
         """
         Gets all rates
@@ -88,6 +106,7 @@ class YellowChanger():
         response = self.__fetch('GET', 'trades/allRates')
         return response.json()
 
+    @__validate_response(models.Destinations)
     def destinations_list(self):
         """
         Gets all destinations list
@@ -99,6 +118,7 @@ class YellowChanger():
         response = self.__fetch('GET', 'trades/destinationsList')
         return response.json()
 
+    @__validate_response(models.Rate)
     def rates_in_direction(self, direction):
         """
         Gets all rates in specific direction
@@ -112,6 +132,7 @@ class YellowChanger():
         response = self.__fetch('GET', 'trades/ratesInDirection', body)
         return response.json()
 
+    @__validate_response(models.Trade)
     def get_info(self, uniq_id):
         """
         Gets information about trade by uniq_id of trade
@@ -125,6 +146,7 @@ class YellowChanger():
         response = self.__fetch('GET', 'trades/getInfo', body)
         return response.json()
 
+    @__validate_response(models.Trade)
     def create_trade(self, **kwargs):
         """
         Creates trade from kwargs.
@@ -146,7 +168,5 @@ class YellowChanger():
         """
         body = kwargs
         body = {key: value for key, value in body.items() if value is not None}
-        print(body)
         response = self.__fetch("POST", 'trades/createTrade', body)
         return response.json()
-
