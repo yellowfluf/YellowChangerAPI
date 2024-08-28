@@ -41,14 +41,14 @@ class Trade(BaseModel):
     uniq_id: str
     status: int
     payment_wallet: str
-    userPaidHash: str
-    ourHash: str
+    userPaidHash: Optional[str] = None
+    ourHash: Optional[str] = None
     get_creds: str
     network_commission: Union[int, float]
     date: int
     time_expire: int
-    send_value: str
-    get_value: str
+    send_value: Union[int, float]
+    get_value: Union[int, float]
 
 class Limit(BaseModel):
     min_amount: Union[int, float]
