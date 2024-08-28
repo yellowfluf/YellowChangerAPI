@@ -3,7 +3,7 @@ from yellow_changer_api import YellowChanger
 
 def main():
     public_api_key = "your_public_key"
-    secret_api_key =  "your_private_key"
+    secret_api_key = "your_private_key"
 
     yellow_changer = YellowChanger(public_api_key, secret_api_key)
 
