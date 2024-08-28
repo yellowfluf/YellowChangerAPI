@@ -22,6 +22,7 @@ setup(
     python_requires='>=3.9',
     install_requires=[
         "requests",
+        "pydantic"
     ],
     project_urls={
         'Bug Reports': 'https://github.com/Whom-m0rty/YellowChangerAPI/issues',
