@@ -25,7 +25,7 @@ def main():
         get_creds='0x4c0101a8CB61766bbE110BB530C03A58383e3545'
     )
 
-    trade_uniq_id = trade.get('uniq_id')
+    trade_uniq_id = trade.uniq_id
 
     trade_info = yellow_changer.get_info(trade_uniq_id)
     print(trade_info)
