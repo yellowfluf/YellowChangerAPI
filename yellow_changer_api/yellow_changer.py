@@ -78,14 +78,18 @@ class YellowChanger():
 
         return response
 
-    def all_rates(self):
+    def all_rates(self, commission=0.5):
         """
+        commission = additional commission in percent which is considered as your profit, courses will be issued with it taken into account, default value 0.5
+
         Gets all rates
 
         https://docs.yellowchanger.com/methods/allrates
         :return: json
         """
-        response = self.__fetch('GET', 'trades/allRates')
+
+        body = {"commission": commission}
+        response = self.__fetch('GET', 'trades/allRates', body)
         return response.json()
 
     def destinations_list(self):
@@ -99,8 +103,10 @@ class YellowChanger():
         response = self.__fetch('GET', 'trades/destinationsList')
         return response.json()
 
-    def rates_in_direction(self, direction):
+    def rates_in_direction(self, direction, commission=0.5):
         """
+        commission = additional commission in percent which is considered as your profit, courses will be issued with it taken into account, default value 0.5
+
         Gets all rates in specific direction
 
         https://docs.yellowchanger.com/methods/ratesindirection
@@ -108,7 +114,7 @@ class YellowChanger():
         :param direction: direction of rate, for example: 'USDT'
         :return: json
         """
-        body = {"direction": direction}
+        body = {"direction": direction, "commission": commission}
         response = self.__fetch('GET', 'trades/ratesInDirection', body)
         return response.json()
 
@@ -136,8 +142,12 @@ class YellowChanger():
             send_value=100,
             send_network='TRC20',
             get_network='ERC20',
-            get_creds='0x4c...'
+            get_creds='0x4c...',
+            exch_type='yellow',
+            commission=0.5
         )
+        exch_type=yellow #rate will fix for 10 minutes (default value)
+        exch_type=green #the rate is fixed at the moment payment is received
 
         https://docs.yellowchanger.com/methods/createtrade
 
