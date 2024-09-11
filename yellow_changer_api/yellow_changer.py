@@ -78,17 +78,19 @@ class YellowChanger():
 
         return response
 
-    def all_rates(self, commission=0.5):
+    def all_rates(self, exch_type="yellow", commission_crypto_to_rub=0.5, commission_crypto_to_crypto=0.5):
         """
         commission = additional commission in percent which is considered as your profit, courses will be issued with it taken into account, default value 0.5
-
+        exch_type=yellow #rate will fix for 10 minutes (default value)
+        exch_type=green #the rate is fixed at the moment payment is received
+        
         Gets all rates
 
         https://docs.yellowchanger.com/methods/allrates
         :return: json
         """
 
-        body = {"commission": commission}
+        body = {"exch_type" : exch_type, "commission_crypto_to_rub" : commission_crypto_to_rub, "commission_crypto_to_crypto" : commission_crypto_to_crypto}
         response = self.__fetch('GET', 'trades/allRates', body)
         return response.json()
 
@@ -103,9 +105,11 @@ class YellowChanger():
         response = self.__fetch('GET', 'trades/destinationsList')
         return response.json()
 
-    def rates_in_direction(self, direction, commission=0.5):
+    def rates_in_direction(self, direction, exch_type="yellow", commission_crypto_to_rub=0.5, commission_crypto_to_crypto=0.5):
         """
         commission = additional commission in percent which is considered as your profit, courses will be issued with it taken into account, default value 0.5
+        exch_type=yellow #rate will fix for 10 minutes (default value)
+        exch_type=green #the rate is fixed at the moment payment is received
 
         Gets all rates in specific direction
 
@@ -114,7 +118,7 @@ class YellowChanger():
         :param direction: direction of rate, for example: 'USDT'
         :return: json
         """
-        body = {"direction": direction, "commission": commission}
+        body = {"direction": direction, "exch_type" : exch_type, "commission_crypto_to_rub" : commission_crypto_to_rub, "commission_crypto_to_crypto" : commission_crypto_to_crypto}
         response = self.__fetch('GET', 'trades/ratesInDirection', body)
         return response.json()
 
@@ -159,4 +163,3 @@ class YellowChanger():
         print(body)
         response = self.__fetch("POST", 'trades/createTrade', body)
         return response.json()
-
