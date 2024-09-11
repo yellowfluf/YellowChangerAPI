@@ -7,13 +7,13 @@ def main():
 
     yellow_changer = YellowChanger(public_api_key, secret_api_key)
 
-    rates = yellow_changer.all_rates(commission=0.5)
+    rates = yellow_changer.all_rates(commission_crypto_to_rub=0.5, commission_crypto_to_crypto=0.5)
     print(rates)
 
     destinations_list = yellow_changer.destinations_list()
     print(destinations_list)
 
-    rates_in_direction_USDT = yellow_changer.rates_in_direction('USDT', commission=0.5)
+    rates_in_direction_USDT = yellow_changer.rates_in_direction('USDT', commission_crypto_to_rub=0.5, commission_crypto_to_crypto=0.5)
     print(rates_in_direction_USDT)
 
     trade = yellow_changer.create_trade(
