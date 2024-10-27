@@ -31,8 +31,6 @@ class YellowChanger():
 
         :param body: Body of request to make a signature
         """
-        if 'timestamp' not in data:
-            data['timestamp'] = str(int(time.time() * 1000))
         query_string = '&'.join([f"{key}={value}" for key, value in data.items()])
         signature = hmac.new(secret_key.encode('utf-8'), query_string.encode('utf-8'), hashlib.sha256).hexdigest()
         
