@@ -31,10 +31,12 @@ class YellowChanger():
 
         :param body: Body of request to make a signature
         """
-        message = json.dumps(body, separators=(',', ':'))
-        hmac_instance = hmac.new(self.secret_api_key.encode(), message.encode(), hashlib.sha256)
-        hmac_digest = hmac_instance.hexdigest()
-        return hmac_digest
+        if 'timestamp' not in data:
+            data['timestamp'] = str(int(time.time() * 1000))
+        query_string = '&'.join([f"{key}={value}" for key, value in data.items()])
+        signature = hmac.new(secret_key.encode('utf-8'), query_string.encode('utf-8'), hashlib.sha256).hexdigest()
+        
+        return signature
 
     def __fetch(self, method: str, path: str, body: dict = None) -> requests.Response:
         """
