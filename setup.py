@@ -6,13 +6,13 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="yellowchangerapi",
-    version="1.0.2",
-    author="whom",
-    author_email="m0rtydisg@gmail.com",
+    version="1.0.3",
+    author="Fluf",
+    author_email="support@yellowchanger.com",
     description="A Python library for interacting with the YellowChanger service API.",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/Whom-m0rty/YellowChangerAPI",
+    url="https://github.com/yellowfluf/YellowChangerAPI",
     packages=find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
@@ -24,7 +24,7 @@ setup(
         "requests",
     ],
     project_urls={
-        'Bug Reports': 'https://github.com/Whom-m0rty/YellowChangerAPI/issues',
-        'Source': 'https://github.com/Whom-m0rty/YellowChangerAPI/tree/main',
+        'Bug Reports': 'https://github.com/yellowfluf/YellowChangerAPI/issues',
+        'Source': 'https://github.com/yellowfluf/YellowChangerAPI/tree/main',
     },
 )
