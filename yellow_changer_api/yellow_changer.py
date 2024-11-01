@@ -24,7 +24,7 @@ class YellowChanger():
         if not base_url:
             self.base_url = 'https://api.yellowchanger.com/'
 
-    def __create_hmac_sha256(self, body: dict):
+    def __create_hmac_sha256(self, data: dict, secret_key: str):
         """
         Method for generation signature of request.
         Copied form https://docs.yellowchanger.com/signature
@@ -54,13 +54,13 @@ class YellowChanger():
                 if body is None:
                     raise ValueError(f'Body of POST request is empty!')
 
-                signature = self.__create_hmac_sha256(body)
+                signature = self.__create_hmac_sha256(body, self.secret_api_key)
                 headers['Signature'] = signature
                 response = requests.post(url, headers=headers, json=body)
 
             elif method.upper() == 'GET':
                 if body:
-                    signature = self.__create_hmac_sha256(body)
+                    signature = self.__create_hmac_sha256(body, self.secret_api_key)
                     headers['Signature'] = signature
                 response = requests.get(url, headers=headers, json=body)
 
