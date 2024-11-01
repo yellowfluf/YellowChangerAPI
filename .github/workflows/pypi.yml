@@ -3,7 +3,7 @@ name: Publish Python Package
 on:
   push:
     tags:
-      - 'v*.*.*'  # Запускать только при создании тега версии, например, v1.0.0
+      - 'v1.0.3'  
 
 jobs:
   publish:
@@ -16,7 +16,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.x'  # Замените на нужную версию Python
+          python-version: '3.10'
 
       - name: Install dependencies
         run: |
