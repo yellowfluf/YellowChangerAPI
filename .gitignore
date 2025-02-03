@@ -1,4 +1,5 @@
 venv_tochka/
+venv
 .env
 .idea
 yellowchangerapi.egg-info/

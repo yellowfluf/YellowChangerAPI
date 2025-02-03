@@ -8,7 +8,12 @@ from .validations import BANKS, format_number
 
 
 class YellowChanger():
-    def __init__(self, public_api_key: str, secret_api_key: str, base_url: Union[None, str] = None):
+    def __init__(
+        self,
+        public_api_key: str,
+        secret_api_key: str,
+        base_url: Union[None, str] = None
+    ):
         """
         All you need to pass only public_api_key and secret_api_key
 
@@ -33,11 +38,20 @@ class YellowChanger():
         :param body: Body of request to make a signature
         """
         query_string = "&".join([f"{key}={value}" for key, value in data.items()])
-        signature = hmac.new(secret_key.encode("utf-8"), query_string.encode("utf-8"), hashlib.sha256).hexdigest()
+        signature = hmac.new(
+            secret_key.encode("utf-8"),
+            query_string.encode("utf-8"),
+            hashlib.sha256
+        ).hexdigest()
 
         return signature
 
-    def __fetch(self, method: str, path: str, body: dict = None) -> requests.Response:
+    def __fetch(
+        self,
+        method: str,
+        path: str,
+        body: Union[dict, None] = None
+    ) -> requests.Response:
         """
         Base request method.
         If request has body, we add signature to request
@@ -75,7 +89,9 @@ class YellowChanger():
             raise BadRequest(f"An error occurred: {err}")
 
         if not str(response.status_code).startswith("20"):
-            raise BadRequest(f"Http status code {response.status_code}: {response.text}")
+            raise BadRequest(
+                f"Http status code {response.status_code}: {response.text}"
+            )
 
         return response
 
@@ -86,14 +102,18 @@ class YellowChanger():
         commission_crypto_to_crypto: float = 0.5
     ):
         """
-        commission = additional commission in percent which is considered as your profit, courses will be issued with it taken into account, default value 0.5
+        commission = additional commission in percent which is considered
+        as your profit, courses will be issued with it taken into account,
+        default value 0.5
+
         exch_type=yellow #rate will fix for 10 minutes (default value)
+
         exch_type=green #the rate is fixed at the moment payment is received
 
         Gets all rates
 
         https://docs.yellowchanger.com/methods/allrates
-        :return: json
+        :return: Dictionary with all possible exchange rates
         """
 
         body = {
@@ -110,7 +130,7 @@ class YellowChanger():
 
         https://docs.yellowchanger.com/methods/destinationslist
 
-        :return:
+        :return: Dictionary with all possible exchange destinations
         """
         response = self.__fetch("GET", "trades/destinationsList")
         return response.json()
@@ -123,8 +143,12 @@ class YellowChanger():
         commission_crypto_to_crypto: float = 0.5
     ):
         """
-        commission = additional commission in percent which is considered as your profit, courses will be issued with it taken into account, default value 0.5
+        commission = additional commission in percent which is considered
+        as your profit, courses will be issued with it taken into account,
+        default value 0.5
+
         exch_type=yellow #rate will fix for 10 minutes (default value)
+
         exch_type=green #the rate is fixed at the moment payment is received
 
         Gets all rates in specific direction
@@ -132,7 +156,7 @@ class YellowChanger():
         https://docs.yellowchanger.com/methods/ratesindirection
 
         :param direction: direction of rate, for example: 'USDT'
-        :return: json
+        :return: Dictionary with rates in a certain direction
         """
         body = {
             "direction": direction,
@@ -150,7 +174,7 @@ class YellowChanger():
         https://docs.yellowchanger.com/methods/tradestatus
 
         :param uniq_id: uniq_id of trade
-        :return: json
+        :return: Dictionary with all information about transaction
         """
         body = {"uniq_id": uniq_id}
         response = self.__fetch("GET", "trades/getInfo", body)
@@ -163,13 +187,13 @@ class YellowChanger():
         send_network: str,
         get_network: str,
         get_creds: str,
-        send_value: float | None = None,
-        get_value: float | None = None,
+        send_value: Union[float, None] = None,
+        get_value: Union[float, None] = None,
         commission: float = 0.5,
-        exch_type: str | None = "yellow",
-        uniq_id: str | None = None,
-        sbpBank: str | None = None,
-        memo: str | None = None
+        exch_type: Union[str, None] = "yellow",
+        uniq_id: Union[str, None] = None,
+        sbpBank: Union[str, None] = None,
+        memo: Union[str, None] = None
     ):
         """
         Creates a new trade via the YellowChanger API.
@@ -177,7 +201,7 @@ class YellowChanger():
 
         Example:
         ```python
-        trade_info = self.create_trade(
+        trade = self.create_trade(
             send_name="USDT",
             get_name="RUB",
             send_network="TRC20",
