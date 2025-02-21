@@ -112,7 +112,7 @@ class YellowChanger():
 
         Gets all rates
 
-        https://docs.yellowchanger.com/methods/allrates
+        https://docs.yellowchanger.com/allRates
         :return: Dictionary with all possible exchange rates
         """
 
@@ -128,7 +128,7 @@ class YellowChanger():
         """
         Gets all destinations list
 
-        https://docs.yellowchanger.com/methods/destinationslist
+        https://docs.yellowchanger.com/destinationsList
 
         :return: Dictionary with all possible exchange destinations
         """
@@ -153,7 +153,7 @@ class YellowChanger():
 
         Gets all rates in specific direction
 
-        https://docs.yellowchanger.com/methods/ratesindirection
+        https://docs.yellowchanger.com/ratesInDirection
 
         :param direction: direction of rate, for example: 'USDT'
         :return: Dictionary with rates in a certain direction
@@ -171,7 +171,7 @@ class YellowChanger():
         """
         Gets information about trade by uniq_id of trade
 
-        https://docs.yellowchanger.com/methods/tradestatus
+        https://docs.yellowchanger.com/getInfo
 
         :param uniq_id: uniq_id of trade
         :return: Dictionary with all information about transaction
@@ -193,11 +193,13 @@ class YellowChanger():
         exch_type: Union[str, None] = "yellow",
         uniq_id: Union[str, None] = None,
         sbpBank: Union[str, None] = None,
-        memo: Union[str, None] = None
+        memo: Union[str, None] = None,
+        recipientName: Union[str, None] = None,
+        testMode: Union[int, None] = None
     ):
         """
         Creates a new trade via the YellowChanger API.
-        For details, see: https://docs.yellowchanger.com/methods/createtrade
+        For details, see: https://docs.yellowchanger.com/createTrade
 
         Example:
         ```python
@@ -226,6 +228,8 @@ class YellowChanger():
         :param uniq_id: Optional unique ID for this trade.
         :param sbpBank: Optional bank name for SBP if receiving RUB via SBP.
         :param memo: Optional note/memo.
+        :param recipientName: Optional recipient's name.
+        :param testMode: Optional test mode (1 or 0). Allows emulating exchange without payment.
 
         :return: Dictionary with API response data about the created trade.
         """
@@ -244,16 +248,90 @@ class YellowChanger():
         if sbpBank:
             if sbpBank.lower() in BANKS.keys():
                 body["sbpBank"] = str(sbpBank)
-            else:
-                raise UnsupportedBank
         if send_value:
             body["send_value"] = format_number(send_value)
         if get_value:
             body["get_value"] = format_number(get_value)
         if memo:
-            if send_name in ["TON", "SOL"]:
-                body["memo"] = str(memo)
+            if get_network in ["TON", "SOL"]:
+                body["get_memo"] = str(memo)
             else:
                 raise UnsupportedMemo
+        if recipientName:
+            body["recipientName"] = str(recipientName)
+        if testMode is not None:
+            if testMode not in [0, 1]:
+                raise ValueError("testMode должен быть 0 или 1")
+            body["testMode"] = testMode
         response = self.__fetch("POST", "trades/createTrade", body)
+        return response.json()
+
+    def cancel_trade(self, uniq_id: str):
+        """
+        Cancels a exchange by its unique ID.
+        For details, see: https://docs.yellowchanger.com/cancelTrade
+
+        :param uniq_id: Unique ID of the trade to cancel.
+        :return: Dictionary with API response data about the canceled trade.
+        """
+        body = {"uniq_id": uniq_id}
+        response = self.__fetch("POST", "trades/cancelTrade", body)
+        return response.json()
+
+    def change_credentials(self, uniq_id: str, get_creds: str, sbpBank: str = None):
+        """
+        Changes the receiving credentials for a trade by its unique ID.
+        For details, see: https://docs.yellowchanger.com/changeCredentials
+
+        :param uniq_id: Unique ID of the trade to change credentials for.
+        :param get_creds: New receiving credentials (address/card/etc.).
+        :param sbpBank: Optional bank name for SBP if receiving RUB via SBP.
+        :return: Dictionary with API response data about the changed credentials.
+        """
+        body = {"uniq_id": str(uniq_id), "get_creds": str(get_creds)}
+        if sbpBank:
+            if sbpBank.lower() in BANKS.keys():
+                body["sbpBank"] = str(sbpBank)
+            else:
+                raise UnsupportedBank
+        response = self.__fetch("POST", "trades/changeCredentials", body)
+        return response.json()
+
+    def emulate_payment(
+        self,
+        uniq_id: str,
+        paidAmount: str,
+        withdrawStatus: str,
+        depositStatus: str,
+        isInvalidRequisites: int
+    ):
+        """
+        Emulates a payment for a trade by its unique ID.
+        For details, see: https://docs.yellowchanger.com/emulatePayment
+
+        :param uniq_id: Unique ID of the trade to emulate payment for
+        :param paidAmount: Amount paid by user
+        :param withdrawStatus: Withdrawal status. Possible values:
+            - withdrawing: withdrawal in progress
+            - error: error occurred
+            - amlblock: AML block
+            - sent: successfully sent
+            - wait_pay: waiting for payment
+        :param depositStatus: Deposit status. Possible values:
+            - user_paid: user has paid
+            - confirmations: waiting for confirmations
+            - error: error occurred
+            - amlblock: AML block
+            - wait_pay: waiting for payment
+        :param isInvalidRequisites: Emulates invalid credentials provided (1 or 0)
+        :return: Dictionary with API response data about the emulated payment
+        """
+        body = {
+            "uniqId": uniq_id,
+            "paidAmount": paidAmount,
+            "withdrawStatus": withdrawStatus,
+            "depositStatus": depositStatus,
+            "isInvalidRequisites": isInvalidRequisites
+        }
+        response = self.__fetch("POST", "trades/emulatePayment", body)
         return response.json()
