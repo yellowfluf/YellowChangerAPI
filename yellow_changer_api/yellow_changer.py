@@ -6,6 +6,7 @@ import httpx
 
 from .exceptions import BadRequest, UnsupportedBank, UnsupportedMemo
 from .validations import BANKS, format_number
+from .http_client import HTTPClient
 
 
 class YellowChanger():
@@ -399,7 +400,7 @@ class AsyncYellowChanger():
         url = self.base_url + path
 
         try:
-            async with httpx.AsyncClient() as client:
+            async with HTTPClient() as client:
                 if method.upper() == "POST":
                     if body is None:
                         raise ValueError("Body of POST request is empty!")
@@ -407,26 +408,32 @@ class AsyncYellowChanger():
                     signature = self.__create_hmac_sha256(
                         body, self.secret_api_key)
                     headers["Signature"] = signature
-                    response = await client.post(url, headers=headers, json=body)
+                    response = await client.post(
+                        url, headers=headers, json=body
+                    )
 
                 elif method.upper() == "GET":
                     if body:
                         signature = self.__create_hmac_sha256(
                             body, self.secret_api_key)
                         headers["Signature"] = signature
-                        response = await client.get(url, headers=headers, json=body)
+                        response = await client.get_json(
+                            url, headers=headers, json_body=body
+                        )
                     else:
                         response = await client.get(url, headers=headers)
 
                 else:
                     raise ValueError(f"Unsupported HTTP method: {method}")
 
-                if not str(response.status_code).startswith("20"):
-                    raise BadRequest(
-                        f"Http status code {response.status_code}: {response.text}"
-                    )
-
-                return response
+                if hasattr(response, 'status_code'):
+                    if not str(response.status_code).startswith("20"):
+                        raise BadRequest(
+                            f"Http status code {response.status_code}: {response.text}"
+                        )
+                    return response
+                else:
+                    return response
 
         except httpx.HTTPError as http_err:
             raise BadRequest(f"HTTP error occurred: {http_err}")
@@ -452,7 +459,7 @@ class AsyncYellowChanger():
             "commission_crypto_to_crypto": commission_crypto_to_crypto
         }
         response = await self.__fetch("GET", "trades/allRates", body)
-        return response.json()
+        return response
 
     async def destinations_list(self):
         """
@@ -462,7 +469,7 @@ class AsyncYellowChanger():
         :return: Dictionary with all possible exchange destinations
         """
         response = await self.__fetch("GET", "trades/destinationsList")
-        return response.json()
+        return response
 
     async def rates_in_direction(
         self,
@@ -485,7 +492,7 @@ class AsyncYellowChanger():
             "commission_crypto_to_crypto": commission_crypto_to_crypto
         }
         response = await self.__fetch("GET", "trades/ratesInDirection", body)
-        return response.json()
+        return response
 
     async def get_info(self, uniq_id: str):
         """
@@ -497,7 +504,7 @@ class AsyncYellowChanger():
         """
         body = {"uniq_id": uniq_id}
         response = await self.__fetch("GET", "trades/getInfo", body)
-        return response.json()
+        return response
 
     async def create_trade(
         self,
@@ -549,7 +556,7 @@ class AsyncYellowChanger():
                 raise ValueError("testMode должен быть 0 или 1")
             body["testMode"] = testMode
         response = await self.__fetch("POST", "trades/createTrade", body)
-        return response.json()
+        return response
 
     async def cancel_trade(self, uniq_id: str):
         """
@@ -557,7 +564,7 @@ class AsyncYellowChanger():
         """
         body = {"uniq_id": uniq_id}
         response = await self.__fetch("POST", "trades/cancelTrade", body)
-        return response.json()
+        return response
 
     async def change_credentials(self, uniq_id: str, get_creds: str, sbpBank: Optional[str] = None):
         """
@@ -570,7 +577,7 @@ class AsyncYellowChanger():
             else:
                 raise UnsupportedBank
         response = await self.__fetch("POST", "trades/changeCredentials", body)
-        return response.json()
+        return response
 
     async def emulate_payment(
         self,
@@ -591,4 +598,4 @@ class AsyncYellowChanger():
             "isInvalidRequisites": isInvalidRequisites
         }
         response = await self.__fetch("POST", "trades/emulatePayment", body)
-        return response.json()
+        return response
