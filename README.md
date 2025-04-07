@@ -103,11 +103,11 @@ info = yellow_changer.get_info('your_unique_id')
 print(info)
 ```
 
-### `create_trade(**kwargs)`
+### `create_trade(*args, **kwargs)`
 
 Creates a new trade based on the provided parameters.
 
-**Example:**
+**Example for crypro:**
 ```python
 trade = yellow_changer.create_trade(
     send_name='USDT',
@@ -116,6 +116,20 @@ trade = yellow_changer.create_trade(
     send_network='TRC20',
     get_network='ERC20',
     get_creds='0x4c...'
+)
+print(trade)
+```
+
+**Example for bank:**
+```python
+trade = yellow_changer.create_trade(
+    send_name="USDT",
+    get_name="RUB",
+    send_value=100,
+    send_network="TRC20",
+    get_network="RUB",
+    get_creds="1234567890123456",
+    sbpBank="sbpsber"
 )
 print(trade)
 ```
