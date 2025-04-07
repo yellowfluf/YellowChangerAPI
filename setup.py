@@ -22,6 +22,7 @@ setup(
     python_requires='>=3.9',
     install_requires=[
         "requests",
+        "httpx",
     ],
     project_urls={
         'Bug Reports': 'https://github.com/yellowfluf/YellowChangerAPI/issues',
